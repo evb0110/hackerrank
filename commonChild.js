@@ -1,4 +1,4 @@
-function commonChild(x, y) {
+function commonChild(x, y) { // https://en.wikipedia.org/wiki/Longest_common_subsequence_problem
     const m = x.length;
     const n = y.length;
     const c = [];
@@ -14,7 +14,9 @@ function commonChild(x, y) {
             if (x[i - 1] === y[j - 1]) {
                 c[i][j] = c[i - 1][j - 1] + x[i - 1];
             } else {
-                c[i][j] = c[i][j - 1].length > c[i - 1][j].length ? c[i][j - 1] : c[i - 1][j];
+                c[i][j] = c[i][j - 1].length > c[i - 1][j].length
+                    ? c[i][j - 1]
+                    : c[i - 1][j];
             }
         }
     }
