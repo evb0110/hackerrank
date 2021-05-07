@@ -1,28 +1,29 @@
 function commonChild(x, y) { // https://en.wikipedia.org/wiki/Longest_common_subsequence_problem
-    const m = x.length;
+    const m = x.length;      // recursive solution gives stack overflow on large strings
     const n = y.length;
-    const c = [];
-    for (let i = 0; i <= m; i++) {
-        c[i] = [];
-        c[i][0] = '';
-    }
-    for (let j = 1; j <= n; j++) {
-        c[0][j] = '';
-    }
-    for (let i = 1; i <= m; i++) {
-        for (let j = 1; j <= m; j++) {
-            if (x[i - 1] === y[j - 1]) {
-                c[i][j] = c[i - 1][j - 1] + x[i - 1];
-            } else {
-                c[i][j] = c[i][j - 1].length > c[i - 1][j].length
-                    ? c[i][j - 1]
-                    : c[i - 1][j];
-            }
-        }
-    }
-    return c[m][n].length;
-}
+    const cache = {};
 
+    return go(m, n).length;
+
+    function go(i, j) {
+        const key = [i, j].join('_');
+        if (cache[key]) {
+            return cache[key];
+        }
+        let result;
+        if (j === 0 || i === 0) {
+            result = '';
+        } else if (x[i - 1] === y[j - 1]) {
+            result = go(i - 1, j - 1) + x[i - 1];
+        } else {
+            const goLeft = go(i, j - 1);
+            const goUp = go(i - 1, j);
+            result = goLeft.length > goUp.length ? goLeft : goUp;
+        }
+        cache[key] = result;
+        return result;
+    }
+}
 
 console.log(
     commonChild(
